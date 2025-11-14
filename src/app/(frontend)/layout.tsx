@@ -1,9 +1,21 @@
 import React from 'react'
-import './styles.css'
+import './globals.css'
+import { Inter } from 'next/font/google'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  description: 'A blank template using Payload in a Next.js app.',
-  title: 'Payload Blank Template',
+  title: 'AI Blog Hub',
+  description:
+    'AI Blog Hub is a powerful platform for creating, publishing, and exploring blogs, enhanced with integrated AI chat features to help you get instant answers and inspiration.',
+  keywords: ['AI', 'blog', 'chatbot', 'writing', 'platform', 'technology', 'content creation'],
+  creator: 'AI Blog Hub Team',
+  viewport: 'width=device-width, initial-scale=1',
+  openGraph: {
+    title: 'AI Blog Hub',
+    description: 'Create, share, and interact with AI-powered blogs.',
+    type: 'website',
+  },
 }
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
@@ -11,7 +23,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 
   return (
     <html lang="en">
-      <body>
+      <body className={inter.className}>
         <main>{children}</main>
       </body>
     </html>
