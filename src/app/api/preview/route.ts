@@ -2,6 +2,7 @@ import { draftMode } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { env } from '@/env'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -10,7 +11,7 @@ export async function GET(request: Request) {
   const collection = searchParams.get('collection') || 'blogs'
 
   // Validate the secret
-  if (secret !== process.env.PAYLOAD_PREVIEW_SECRET) {
+  if (!env.PAYLOAD_PREVIEW_SECRET || secret !== env.PAYLOAD_PREVIEW_SECRET) {
     return new Response('Invalid token', { status: 401 })
   }
 

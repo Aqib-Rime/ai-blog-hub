@@ -7,14 +7,11 @@ import React from 'react'
 export const RefreshRouteOnSave: React.FC = () => {
   const router = useRouter()
 
-  return (
-    <PayloadLivePreview
-      refresh={() => router.refresh()}
-      serverURL={
-        process.env.NEXT_PUBLIC_PAYLOAD_URL ||
-        process.env.NEXT_PUBLIC_SITE_URL ||
-        'http://localhost:3000'
-      }
-    />
-  )
+  // Client components can only access NEXT_PUBLIC_* variables directly
+  const serverURL =
+    process.env.NEXT_PUBLIC_PAYLOAD_URL ||
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    'http://localhost:3000'
+
+  return <PayloadLivePreview refresh={() => router.refresh()} serverURL={serverURL} />
 }

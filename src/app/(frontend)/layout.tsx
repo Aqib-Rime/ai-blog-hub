@@ -3,11 +3,12 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import { Navbar } from '@/features/navbar/navbar'
 import type { Viewport } from 'next'
+import { env } from '@/env'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: 'AI Blog Hub',
   description:
     'AI Blog Hub is a powerful platform for creating, publishing, and exploring blogs, enhanced with integrated AI chat features to help you get instant answers and inspiration.',

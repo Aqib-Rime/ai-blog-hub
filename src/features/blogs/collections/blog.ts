@@ -1,6 +1,8 @@
 import { slugField, type CollectionConfig } from 'payload'
 import { HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { defaultVersionConfig } from '@/collections/config/default-version-config'
+import { revalidatePath } from 'next/cache'
+import { env } from '@/env'
 
 export const Blog: CollectionConfig = {
   slug: 'blogs',
@@ -8,13 +10,13 @@ export const Blog: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'author', 'publishDate', 'updatedAt'],
     preview: (doc) => {
-      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
-      const secret = process.env.PAYLOAD_PREVIEW_SECRET || ''
+      const baseUrl = env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+      const secret = env.PAYLOAD_PREVIEW_SECRET || ''
       return `${baseUrl}/api/preview?secret=${secret}&slug=${doc.slug}&collection=blogs`
     },
     livePreview: {
       url: ({ data }) => {
-        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+        const baseUrl = env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
         if (data?.slug) {
           return `${baseUrl}/blogs/${data.slug}`
         }
@@ -25,6 +27,33 @@ export const Blog: CollectionConfig = {
   versions: defaultVersionConfig,
   access: {
     read: () => true,
+  },
+  hooks: {
+    afterChange: [
+      async ({ doc, previousDoc }) => {
+        const isPublished = doc._status === 'published'
+        const wasPublished = previousDoc?._status === 'published' && doc._status !== 'published'
+        // Revalidate homepage if status changed (published/unpublished) or if blog is published
+        if (isPublished) {
+          revalidatePath('/')
+          revalidatePath(`/blogs/${doc.slug}`)
+        }
+        if (wasPublished) {
+          revalidatePath('/')
+          revalidatePath(`/blogs/${previousDoc.slug}`)
+        }
+      },
+    ],
+    afterDelete: [
+      async ({ doc }) => {
+        // Only revalidate if the deleted blog was published
+        if (doc._status === 'published' && doc.slug) {
+          revalidatePath(`/blogs/${doc.slug}`)
+          // Revalidate the homepage to remove it from listing
+          revalidatePath('/')
+        }
+      },
+    ],
   },
   fields: [
     {

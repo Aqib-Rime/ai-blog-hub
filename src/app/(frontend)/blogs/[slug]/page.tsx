@@ -120,9 +120,9 @@ export default async function BlogPostPage(props: PageProps<'/blogs/[slug]'>) {
           {/* Black gradient overlay from bottom */}
           <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent" />
           {/* Header content overlaid on image */}
-          <div className="absolute bottom-0 left-0 right-0">
-            <Container>
-              <div className="p-4 md:p-6">
+          <div className="absolute bottom-0 inset-x-0">
+            <div className="py-4 md:py-6">
+              <Container className="max-w-3xl">
                 <header>
                   <h1 className="text-3xl md:text-4xl font-bold mb-3 text-white">{blog.title}</h1>
                   <div className="flex flex-wrap items-center gap-4 text-white/90">
@@ -139,39 +139,35 @@ export default async function BlogPostPage(props: PageProps<'/blogs/[slug]'>) {
                     )}
                   </div>
                 </header>
-              </div>
-            </Container>
+              </Container>
+            </div>
           </div>
         </div>
       ) : (
-        <Container>
-          <div className="max-w-3xl mx-auto">
-            <header className="mb-8">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">{blog.title}</h1>
-              <div className="flex flex-wrap items-center gap-4 text-muted-foreground">
-                {publishDate && <time dateTime={blog.publishDate}>{publishDate}</time>}
-                {author && typeof author === 'object' && (
-                  <div className="flex items-center gap-2">
-                    <span>by</span>
-                    <span className="font-medium text-foreground">{author.email}</span>
-                  </div>
-                )}
-              </div>
-            </header>
-          </div>
-        </Container>
+        <header className="mb-8">
+          <Container className="max-w-3xl">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">{blog.title}</h1>
+            <div className="flex flex-wrap items-center gap-4 text-muted-foreground">
+              {publishDate && <time dateTime={blog.publishDate}>{publishDate}</time>}
+              {author && typeof author === 'object' && (
+                <div className="flex items-center gap-2">
+                  <span>by</span>
+                  <span className="font-medium text-foreground">{author.email}</span>
+                </div>
+              )}
+            </div>
+          </Container>
+        </header>
       )}
 
-      <Container>
-        <div className="max-w-3xl mx-auto">
-          <div className="prose prose-lg dark:prose-invert max-w-none mb-12">
-            <RichText data={blog.content} />
-          </div>
-
-          {author && typeof author === 'object' && blog.authorSocialLinks && (
-            <AuthorSection author={author} socialLinks={blog.authorSocialLinks} />
-          )}
+      <Container className="max-w-3xl">
+        <div className="prose prose-lg dark:prose-invert max-w-none mb-12">
+          <RichText data={blog.content} />
         </div>
+
+        {author && typeof author === 'object' && blog.authorSocialLinks && (
+          <AuthorSection author={author} socialLinks={blog.authorSocialLinks} />
+        )}
       </Container>
     </article>
   )
