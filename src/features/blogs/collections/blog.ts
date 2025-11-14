@@ -7,6 +7,12 @@ export const Blog: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'author', 'publishDate', 'updatedAt'],
+    preview: (doc) => {
+      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+      const secret = process.env.PAYLOAD_PREVIEW_SECRET || ''
+      console.log(doc, secret, baseUrl)
+      return `${baseUrl}/api/preview?secret=${secret}&slug=${doc.slug}&collection=blogs`
+    },
   },
   versions: defaultVersionConfig,
   access: {

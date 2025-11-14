@@ -1,4 +1,5 @@
 import { cache } from 'react'
+import { draftMode } from 'next/headers'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { Container } from '@/components/Container'
@@ -8,6 +9,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { AuthorSection } from '@/features/blogs/components'
+import { RefreshRouteOnSave } from '@/components/RefreshRouteOnSave'
 
 // Cache the function to fetch published blogs
 const getPublishedBlogs = cache(async () => {
@@ -77,6 +79,7 @@ export async function generateMetadata(props: PageProps<'/blogs/[slug]'>): Promi
 
 export default async function BlogPostPage(props: PageProps<'/blogs/[slug]'>) {
   const params = await props.params
+  const { isEnabled: isDraftMode } = await draftMode()
   const payload = await getPayload({ config: configPromise })
 
   const blogs = await payload.find({
@@ -85,12 +88,11 @@ export default async function BlogPostPage(props: PageProps<'/blogs/[slug]'>) {
       slug: {
         equals: params.slug,
       },
-      _status: {
-        equals: 'published',
-      },
+      ...(isDraftMode ? {} : { _status: { equals: 'published' } }),
     },
     depth: 2,
     limit: 1,
+    draft: isDraftMode,
   })
 
   const blog = blogs.docs[0]
@@ -105,6 +107,7 @@ export default async function BlogPostPage(props: PageProps<'/blogs/[slug]'>) {
 
   return (
     <article className="pt-16 pb-16">
+      {isDraftMode && <RefreshRouteOnSave />}
       {bannerImage?.url ? (
         <div className="relative w-full h-[200px] md:h-[300px] mb-8">
           <Image
