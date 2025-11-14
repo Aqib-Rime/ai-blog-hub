@@ -3,8 +3,8 @@ import { IncomingCollectionVersions } from 'node_modules/payload/dist/versions/t
 export const defaultVersionConfig: boolean | IncomingCollectionVersions = {
   drafts: {
     autosave: {
-      interval: 400,
       showSaveDraftButton: true,
+      interval: 5000,
     },
     schedulePublish: true,
     validate: true,

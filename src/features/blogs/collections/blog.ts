@@ -94,6 +94,24 @@ export const Blog: CollectionConfig = {
               required: true,
             }),
             {
+              name: 'bannerImage',
+              type: 'upload',
+              relationTo: 'media',
+              required: true,
+              admin: {
+                description: 'Banner image displayed at the top of the blog post',
+              },
+            },
+            {
+              name: 'thumbnailImage',
+              type: 'upload',
+              relationTo: 'media',
+              required: true,
+              admin: {
+                description: 'Thumbnail image for blog previews and cards',
+              },
+            },
+            {
               name: 'publishDate',
               type: 'date',
               required: true,

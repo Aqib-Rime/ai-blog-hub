@@ -9,7 +9,7 @@ export function Navbar() {
           <AIBlogHubLogo />
           <h2 className="text-xl font-bold mt-1">AI Blog HUB</h2>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           <Button variant="outline">Login</Button>
           <Button>Sign up</Button>
         </div>
@@ -20,65 +20,21 @@ export function Navbar() {
 
 const AIBlogHubLogo = () => {
   return (
-    <div className="flex items-center gap-2">
-      <svg
-        width="36"
-        height="36"
-        viewBox="0 0 40 40"
-        fill="none"
-        aria-label="AI Blog Hub Logo"
-        xmlns="http://www.w3.org/2000/svg"
-        className="shrink-0"
-      >
-        <defs>
-          <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#6366F1" />
-            <stop offset="100%" stopColor="#8B5CF6" />
-          </linearGradient>
-        </defs>
-        {/* Modern geometric A shape */}
-        <path d="M20 8L28 32H24L22.5 27H17.5L16 32H12L20 8Z" fill="url(#logoGradient)" />
-        <path d="M20 12L16.5 24H23.5L20 12Z" fill="white" fillOpacity="0.9" />
-        {/* Blog/document element */}
-        <rect
-          x="24"
-          y="14"
-          width="8"
-          height="10"
-          rx="1"
-          fill="url(#logoGradient)"
-          fillOpacity="0.2"
-          stroke="url(#logoGradient)"
-          strokeWidth="1.5"
-        />
-        <line
-          x1="26"
-          y1="17"
-          x2="30"
-          y2="17"
-          stroke="url(#logoGradient)"
-          strokeWidth="1"
-          strokeLinecap="round"
-        />
-        <line
-          x1="26"
-          y1="19.5"
-          x2="30"
-          y2="19.5"
-          stroke="url(#logoGradient)"
-          strokeWidth="1"
-          strokeLinecap="round"
-        />
-        <line
-          x1="26"
-          y1="22"
-          x2="29"
-          y2="22"
-          stroke="url(#logoGradient)"
-          strokeWidth="1"
-          strokeLinecap="round"
-        />
-      </svg>
-    </div>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="icon icon-tabler icons-tabler-outline icon-tabler-blocks"
+    >
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M14 4a1 1 0 0 1 1 -1h5a1 1 0 0 1 1 1v5a1 1 0 0 1 -1 1h-5a1 1 0 0 1 -1 -1z" />
+      <path d="M3 14h12a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h3a2 2 0 0 1 2 2v12" />
+    </svg>
   )
 }

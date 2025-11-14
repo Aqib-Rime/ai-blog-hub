@@ -214,6 +214,14 @@ export interface Blog {
    */
   generateSlug?: boolean | null;
   slug: string;
+  /**
+   * Banner image displayed at the top of the blog post
+   */
+  bannerImage: number | Media;
+  /**
+   * Thumbnail image for blog previews and cards
+   */
+  thumbnailImage: number | Media;
   publishDate: string;
   updatedAt: string;
   createdAt: string;
@@ -447,6 +455,8 @@ export interface BlogsSelect<T extends boolean = true> {
       };
   generateSlug?: T;
   slug?: T;
+  bannerImage?: T;
+  thumbnailImage?: T;
   publishDate?: T;
   updatedAt?: T;
   createdAt?: T;
