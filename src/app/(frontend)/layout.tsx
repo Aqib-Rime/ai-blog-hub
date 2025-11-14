@@ -1,6 +1,7 @@
 import React from 'react'
 import './globals.css'
 import { Inter } from 'next/font/google'
+import { Navbar } from '@/features/navbar/navbar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,7 +25,10 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <main>{children}</main>
+        <main>
+          <Navbar />
+          {children}
+        </main>
       </body>
     </html>
   )
