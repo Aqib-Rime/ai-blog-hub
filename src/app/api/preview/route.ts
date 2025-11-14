@@ -34,8 +34,6 @@ export async function GET(request: Request) {
       draft: true,
     })
 
-    console.log(result)
-
     if (!result.docs[0]) {
       return new Response('Document not found', { status: 404 })
     }
@@ -44,6 +42,7 @@ export async function GET(request: Request) {
     const draft = await draftMode()
     draft.enable()
   } catch (error) {
+    console.error(error)
     return new Response('Error fetching document', { status: 500 })
   }
   // Redirect to the preview page

@@ -10,8 +10,16 @@ export const Blog: CollectionConfig = {
     preview: (doc) => {
       const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
       const secret = process.env.PAYLOAD_PREVIEW_SECRET || ''
-      console.log(doc, secret, baseUrl)
       return `${baseUrl}/api/preview?secret=${secret}&slug=${doc.slug}&collection=blogs`
+    },
+    livePreview: {
+      url: ({ data }) => {
+        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+        if (data?.slug) {
+          return `${baseUrl}/blogs/${data.slug}`
+        }
+        return baseUrl
+      },
     },
   },
   versions: defaultVersionConfig,
