@@ -11,7 +11,7 @@ export function BlogCard({ blog }: { blog: Blog }) {
   const publishDate = blog.publishDate ? format(new Date(blog.publishDate), 'MMM d, yyyy') : ''
 
   return (
-    <Link href={`/blogs/${blog.slug}` as Route}>
+    <Link className="relative z-10" href={`/blogs/${blog.slug}` as Route}>
       <Card className="overflow-hidden hover:shadow-lg p-0 transition-shadow cursor-pointer h-full flex flex-col">
         {thumbnailImage?.url && (
           <div className="relative w-full h-48 bg-yellow-300 overflow-hidden">
@@ -41,4 +41,3 @@ export function BlogCard({ blog }: { blog: Blog }) {
     </Link>
   )
 }
-

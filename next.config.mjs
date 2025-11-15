@@ -4,6 +4,14 @@ import { withPayload } from '@payloadcms/next/withPayload'
 const nextConfig = {
   typedRoutes: true,
   reactStrictMode: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
+  },
   // Your Next.js config here
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {

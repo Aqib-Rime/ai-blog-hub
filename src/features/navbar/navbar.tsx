@@ -1,15 +1,18 @@
 import { Container } from '@/components/Container'
+import { ModeToggle } from '@/components/mode-toggle'
 import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 export function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 border-b border-border/40">
       <Container className="flex items-center justify-between h-16">
-        <div className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2 cursor-pointer">
           <AIBlogHubLogo />
           <h2 className="text-xl font-bold mt-1">AI Blog HUB</h2>
-        </div>
+        </Link>
         <div className="flex items-center gap-2">
+          <ModeToggle />
           <Button variant="outline">Login</Button>
           <Button>Sign up</Button>
         </div>
