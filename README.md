@@ -1,67 +1,123 @@
-# Payload Blank Template
+# AI Blog Hub
 
-This template comes configured with the bare minimum to get started on anything you need.
+A modern blog platform powered by AI, featuring intelligent chat assistance using RAG (Retrieval Augmented Generation) and vector similarity search.
 
-## Quick start
+## 🚀 Features
 
-This template can be deployed directly from our Cloud hosting and it will setup MongoDB and cloud S3 object storage for media.
+- **AI-Powered Chat Assistant** - Ask questions about blog posts using RAG with vector similarity search
+- **Blog Management** - Full-featured CMS with Payload CMS for content creation and management
+- **Vector Search** - Automatic blog embeddings generation using Google Gemini for semantic search
+- **Modern UI** - Beautiful, responsive interface built with Tailwind CSS and shadcn/ui components
+- **Real-time Chat** - Stream responses using Groq's Llama 3.3 model
 
-## Quick Start - local setup
+## 🛠️ Technology Stack
 
-To spin up this template locally, follow these steps:
+- **Framework**: Next.js 15 (App Router)
+- **CMS**: Payload CMS 3.62
+- **Database**: PostgreSQL with pgvector extension
+- **AI/ML**:
+  - Groq (Llama 3.3) for chat completions
+  - Google Gemini for text embeddings
+- **UI**: React 19, Tailwind CSS, shadcn/ui
+- **Language**: TypeScript
 
-### Clone
+## 📋 Prerequisites
 
-After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
+- Node.js 18.20.2+ or 20.9.0+
+- pnpm 9+ or 10+
+- PostgreSQL database with pgvector extension enabled
+- API keys:
+  - [Groq API Key](https://console.groq.com/)
+  - [Google Gemini API Key](https://makersuite.google.com/app/apikey)
 
-### Development
+## ⚙️ Setup
 
-1. First [clone the repo](#clone) if you have not done so already
-2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `MONGODB_URI` from your Cloud project to your `.env` if you want to use S3 storage and the MongoDB database that was created for you.
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd ai-blog-hub
+   ```
 
-3. `pnpm install && pnpm dev` to install dependencies and start the dev server
-4. open `http://localhost:3000` to open the app in your browser
+2. **Install dependencies**
+   ```bash
+   pnpm install
+   ```
 
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+3. **Set up environment variables**
+   
+   Create a `.env` file in the root directory:
+   ```env
+   # Payload CMS
+   PAYLOAD_SECRET=your-secret-key-here
+   DATABASE_URI=postgresql://user:password@localhost:5432/ai_blog_hub
+   
+   # AI Services
+   GEMINI_API_KEY=your-gemini-api-key
+   GROQ_API_KEY=your-groq-api-key
+   
+   # Optional
+   NEXT_PUBLIC_SITE_URL=http://localhost:3000
+   PAYLOAD_PREVIEW_SECRET=your-preview-secret
+   ```
 
-#### Docker (Optional)
+4. **Set up PostgreSQL with pgvector**
+   
+   Ensure PostgreSQL has the pgvector extension enabled:
+   ```sql
+   CREATE EXTENSION IF NOT EXISTS vector;
+   ```
+   
+   Or use Docker:
+   ```bash
+   docker run -d \
+     --name postgres-pgvector \
+     -e POSTGRES_PASSWORD=password \
+     -e POSTGRES_DB=ai_blog_hub \
+     -p 5432:5432 \
+     pgvector/pgvector:pg16
+   ```
 
-If you prefer to use Docker for local development instead of a local MongoDB instance, the provided docker-compose.yml file can be used.
+5. **Run database migrations**
+   
+   The pgvector extension will be automatically enabled on first run.
 
-To do so, follow these steps:
+6. **Start the development server**
+   ```bash
+   pnpm dev
+   ```
 
-- Modify the `MONGODB_URI` in your `.env` file to `mongodb://127.0.0.1/<dbname>`
-- Modify the `docker-compose.yml` file's `MONGODB_URI` to match the above `<dbname>`
-- Run `docker-compose up` to start the database, optionally pass `-d` to run in the background.
+7. **Access the application**
+   - Frontend: http://localhost:3000
+   - Admin Panel: http://localhost:3000/admin
 
-## How it works
+8. **Create your first admin user**
+   
+   Follow the on-screen instructions when accessing the admin panel for the first time.
 
-The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
+## 🐳 Docker Setup (Optional)
 
-### Collections
+You can use Docker Compose for local development:
 
-See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
+```bash
+docker-compose up -d
+```
 
-- #### Users (Authentication)
+Note: Update the `DATABASE_URI` in your `.env` file to match your Docker PostgreSQL connection string.
 
-  Users are auth-enabled collections that have access to the admin panel.
+## 📝 Usage
 
-  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/main/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
+1. **Create Blog Posts**: Access the admin panel at `/admin` and create blog posts with rich text content
+2. **Automatic Embeddings**: When you publish a blog, embeddings are automatically generated and stored
+3. **Chat with Blogs**: Use the chat widget on blog pages to ask questions about specific posts, or chat globally about all blogs
+4. **Vector Search**: The RAG system retrieves the most relevant blog chunks using cosine similarity
 
-- #### Media
+## 📦 Build for Production
 
-  This is the uploads enabled collection. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
+```bash
+pnpm build
+pnpm start
+```
 
-### Docker
+## 📄 License
 
-Alternatively, you can use [Docker](https://www.docker.com) to spin up this template locally. To do so, follow these steps:
-
-1. Follow [steps 1 and 2 from above](#development), the docker-compose file will automatically use the `.env` file in your project root
-1. Next run `docker-compose up`
-1. Follow [steps 4 and 5 from above](#development) to login and create your first admin user
-
-That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
-
-## Questions
-
-If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+MIT
