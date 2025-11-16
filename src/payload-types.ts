@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     media: Media;
     blogs: Blog;
+    'blog-embeddings': BlogEmbedding;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
@@ -81,6 +82,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     blogs: BlogsSelect<false> | BlogsSelect<true>;
+    'blog-embeddings': BlogEmbeddingsSelect<false> | BlogEmbeddingsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -229,6 +231,36 @@ export interface Blog {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-embeddings".
+ */
+export interface BlogEmbedding {
+  id: number;
+  blog: number | Blog;
+  /**
+   * Index of the chunk within the blog post
+   */
+  chunkIndex: number;
+  /**
+   * Text content of this chunk
+   */
+  content: string;
+  /**
+   * Vector embedding stored as JSON array
+   */
+  embedding:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -356,6 +388,10 @@ export interface PayloadLockedDocument {
         value: number | Blog;
       } | null)
     | ({
+        relationTo: 'blog-embeddings';
+        value: number | BlogEmbedding;
+      } | null)
+    | ({
         relationTo: 'payload-kv';
         value: number | PayloadKv;
       } | null)
@@ -469,6 +505,18 @@ export interface BlogsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-embeddings_select".
+ */
+export interface BlogEmbeddingsSelect<T extends boolean = true> {
+  blog?: T;
+  chunkIndex?: T;
+  content?: T;
+  embedding?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

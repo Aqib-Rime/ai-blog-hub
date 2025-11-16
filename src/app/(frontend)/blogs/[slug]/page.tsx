@@ -186,7 +186,7 @@ export default async function BlogPostPage(props: PageProps<'/blogs/[slug]'>) {
       <div
         className={cn(
           'flex-1 bg-size-[30px_30px]',
-          'bg-[radial-gradient(var(--color-neutral-200)_1px,transparent_1px)]',
+          'bg-[radial-gradient(var(--color-neutral-300)_1px,transparent_1px)]',
           'dark:bg-[radial-gradient(var(--color-neutral-700)_1px,transparent_1px)]',
         )}
       >

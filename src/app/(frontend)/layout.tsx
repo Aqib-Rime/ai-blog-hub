@@ -5,6 +5,7 @@ import { Navbar } from '@/features/navbar/navbar'
 import type { Viewport } from 'next'
 import { env } from '@/env'
 import { ThemeProvider } from '@/components/theme-provider'
+import { ChatWidgetWrapper } from '@/components/chat/ChatWidgetWrapper'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -42,6 +43,7 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
             <Navbar />
             {children}
           </main>
+          <ChatWidgetWrapper />
         </ThemeProvider>
       </body>
     </html>

@@ -8,6 +8,9 @@ export const env = createEnv({
     DATABASE_URI: z.string().url(),
     PAYLOAD_PREVIEW_SECRET: z.string().min(1).optional(),
     REVALIDATE_SECRET: z.string().min(1).optional(),
+    // AI/Embeddings
+    GEMINI_API_KEY: z.string().min(1),
+    GROQ_API_KEY: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_SITE_URL: z.string().url().optional(),
@@ -19,6 +22,8 @@ export const env = createEnv({
     DATABASE_URI: process.env.DATABASE_URI,
     PAYLOAD_PREVIEW_SECRET: process.env.PAYLOAD_PREVIEW_SECRET,
     REVALIDATE_SECRET: process.env.REVALIDATE_SECRET,
+    GEMINI_API_KEY: process.env.GEMINI_API_KEY,
+    GROQ_API_KEY: process.env.GROQ_API_KEY,
     // Client
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
     NEXT_PUBLIC_PAYLOAD_URL: process.env.NEXT_PUBLIC_PAYLOAD_URL,

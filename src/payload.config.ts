@@ -9,7 +9,9 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Blog } from './features/blogs/collections/blog'
+import { BlogEmbeddings } from './collections/BlogEmbeddings'
 import { env } from './env'
+import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -43,7 +45,7 @@ export default buildConfig({
       ],
     },
   },
-  collections: [Users, Media, Blog],
+  collections: [Users, Media, Blog, BlogEmbeddings],
   editor: lexicalEditor(),
   secret: env.PAYLOAD_SECRET,
   typescript: {
@@ -53,6 +55,7 @@ export default buildConfig({
     pool: {
       connectionString: env.DATABASE_URI,
     },
+    prodMigrations: migrations,
   }),
   sharp,
   plugins: [
