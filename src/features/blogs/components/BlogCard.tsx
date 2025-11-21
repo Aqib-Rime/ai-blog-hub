@@ -14,7 +14,7 @@ export function BlogCard({ blog }: { blog: Blog }) {
     <Link className="relative z-10" href={`/blogs/${blog.slug}` as Route}>
       <Card className="overflow-hidden hover:shadow-lg p-0 transition-shadow cursor-pointer h-full flex flex-col">
         {thumbnailImage?.url && (
-          <div className="relative w-full h-48 overflow-hidden">
+          <div className="relative w-full h-48 bg-yellow-300 overflow-hidden">
             <Image
               src={thumbnailImage.url}
               alt={thumbnailImage.alt || blog.title}

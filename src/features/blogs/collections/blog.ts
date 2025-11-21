@@ -1,7 +1,7 @@
 import { slugField, type CollectionConfig } from 'payload'
 import { HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { defaultVersionConfig } from '@/collections/config/default-version-config'
-import { revalidateTag } from 'next/cache'
+import { revalidatePath } from 'next/cache'
 import { env } from '@/env'
 import { upsertBlogEmbeddings, deleteBlogEmbeddings } from '@/lib/blog-embeddings'
 
@@ -37,12 +37,12 @@ export const Blog: CollectionConfig = {
 
         // Revalidate homepage if status changed (published/unpublished) or if blog is published
         if (isPublished) {
-          revalidateTag(`blog-page-${doc.slug}`, 'max')
-          revalidateTag(`blog-metadata-${doc.slug}`, 'max')
+          revalidatePath('/')
+          revalidatePath(`/blogs/${doc.slug}`)
         }
         if (wasPublished) {
-          revalidateTag(`blog-page-${previousDoc.slug}`, 'max')
-          revalidateTag(`blog-metadata-${previousDoc.slug}`, 'max')
+          revalidatePath('/')
+          revalidatePath(`/blogs/${previousDoc.slug}`)
         }
 
         // Generate embeddings when blog is published or updated
@@ -67,8 +67,9 @@ export const Blog: CollectionConfig = {
       async ({ doc, req }) => {
         // Only revalidate if the deleted blog was published
         if (doc._status === 'published' && doc.slug) {
-          revalidateTag(`blog-page-${doc.slug}`, 'max')
-          revalidateTag(`blog-metadata-${doc.slug}`, 'max')
+          revalidatePath(`/blogs/${doc.slug}`)
+          // Revalidate the homepage to remove it from listing
+          revalidatePath('/')
         }
 
         // Delete embeddings when blog is deleted

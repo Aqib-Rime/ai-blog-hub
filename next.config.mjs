@@ -4,7 +4,6 @@ import { withPayload } from '@payloadcms/next/withPayload'
 const nextConfig = {
   typedRoutes: true,
   reactStrictMode: true,
-  cacheComponents: true,
   images: {
     remotePatterns: [
       {

@@ -11,7 +11,6 @@ import { RichText } from '@payloadcms/richtext-lexical/react'
 import { AuthorSection } from '@/features/blogs/components'
 import { RefreshRouteOnSave } from '@/components/RefreshRouteOnSave'
 import { cn } from '@/lib/utils'
-import { cacheLife, cacheTag } from 'next/cache'
 
 type BlogBannerProps = {
   bannerImage: { url?: string | null; alt?: string | null } | null
@@ -105,13 +104,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(props: PageProps<'/blogs/[slug]'>): Promise<Metadata> {
-  'use cache'
-  cacheLife('max')
-
   const params = await props.params
-
-  cacheTag(`blog-metadata-${params.slug}`)
-
   const payload = await getPayload({ config: configPromise })
 
   const blogs = await payload.find({
@@ -152,15 +145,7 @@ export async function generateMetadata(props: PageProps<'/blogs/[slug]'>): Promi
 }
 
 export default async function BlogPostPage(props: PageProps<'/blogs/[slug]'>) {
-  'use cache'
-  cacheLife('max')
-
   const params = await props.params
-
-  cacheTag(`blog-page-${params.slug}`)
-
-  console.log('generating blog page for', params.slug)
-
   const { isEnabled: isDraftMode } = await draftMode()
   const payload = await getPayload({ config: configPromise })
 
