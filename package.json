@@ -1,7 +1,7 @@
 {
   "name": "ai-blog-hub",
   "version": "1.0.0",
-  "description": "A blank template to get started with Payload 3.0",
+  "description": "Website for the AI Blog Hub",
   "license": "MIT",
   "type": "module",
   "scripts": {
