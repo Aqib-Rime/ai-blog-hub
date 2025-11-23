@@ -1,9 +1,8 @@
 import { slugField, type CollectionConfig } from 'payload'
 import { HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { defaultVersionConfig } from '@/collections/config/default-version-config'
-import { revalidatePath } from 'next/cache'
 import { env } from '@/env'
-import { upsertBlogEmbeddings, deleteBlogEmbeddings } from '@/lib/blog-embeddings'
+import { afterChangeHook, afterDeleteHook } from './blog.hooks'
 
 export const Blog: CollectionConfig = {
   slug: 'blogs',
@@ -30,58 +29,8 @@ export const Blog: CollectionConfig = {
     read: () => true,
   },
   hooks: {
-    afterChange: [
-      async ({ doc, previousDoc, req, operation }) => {
-        const isPublished = doc._status === 'published'
-        const wasPublished = previousDoc?._status === 'published' && doc._status !== 'published'
-
-        // Revalidate homepage if status changed (published/unpublished) or if blog is published
-        if (isPublished) {
-          revalidatePath('/')
-          revalidatePath(`/blogs/${doc.slug}`)
-        }
-        if (wasPublished) {
-          revalidatePath('/')
-          revalidatePath(`/blogs/${previousDoc.slug}`)
-        }
-
-        // Generate embeddings when blog is published or updated
-        if (isPublished && doc.content && doc.id) {
-          try {
-            await upsertBlogEmbeddings(req.payload, doc.id, doc.content)
-          } catch (error) {
-            console.error('Error generating embeddings for blog:', error)
-            // Don't throw - allow the blog to be saved even if embeddings fail
-          }
-        } else if (wasPublished && doc.id) {
-          // Delete embeddings if blog is unpublished
-          try {
-            await deleteBlogEmbeddings(req.payload, doc.id)
-          } catch (error) {
-            console.error('Error deleting embeddings for blog:', error)
-          }
-        }
-      },
-    ],
-    afterDelete: [
-      async ({ doc, req }) => {
-        // Only revalidate if the deleted blog was published
-        if (doc._status === 'published' && doc.slug) {
-          revalidatePath(`/blogs/${doc.slug}`)
-          // Revalidate the homepage to remove it from listing
-          revalidatePath('/')
-        }
-
-        // Delete embeddings when blog is deleted
-        if (doc.id) {
-          try {
-            await deleteBlogEmbeddings(req.payload, doc.id)
-          } catch (error) {
-            console.error('Error deleting embeddings for blog:', error)
-          }
-        }
-      },
-    ],
+    afterChange: [afterChangeHook],
+    afterDelete: [afterDeleteHook],
   },
   fields: [
     {
