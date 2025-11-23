@@ -1,6 +1,6 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'payload'
-import { revalidatePath } from 'next/cache'
 import { upsertBlogEmbeddings, deleteBlogEmbeddings } from '@/lib/blog-embeddings'
+import { revalidateBlog } from '@/features/blogs/lib'
 
 export const afterChangeHook: CollectionAfterChangeHook = async ({
   doc,
@@ -11,14 +11,12 @@ export const afterChangeHook: CollectionAfterChangeHook = async ({
   const isPublished = doc._status === 'published'
   const wasPublished = previousDoc?._status === 'published' && doc._status !== 'published'
 
-  // Revalidate homepage if status changed (published/unpublished) or if blog is published
+  // Revalidate cached blog data using cache tags
   if (isPublished) {
-    revalidatePath('/')
-    revalidatePath(`/blogs/${doc.slug}`)
+    revalidateBlog(doc.slug)
   }
   if (wasPublished) {
-    revalidatePath('/')
-    revalidatePath(`/blogs/${previousDoc.slug}`)
+    revalidateBlog(previousDoc.slug)
   }
 
   // Generate embeddings when blog is published or updated
@@ -40,11 +38,9 @@ export const afterChangeHook: CollectionAfterChangeHook = async ({
 }
 
 export const afterDeleteHook: CollectionAfterDeleteHook = async ({ doc, req }) => {
-  // Only revalidate if the deleted blog was published
+  // Revalidate cached blog data when blog is deleted
   if (doc._status === 'published' && doc.slug) {
-    revalidatePath(`/blogs/${doc.slug}`)
-    // Revalidate the homepage to remove it from listing
-    revalidatePath('/')
+    revalidateBlog(doc.slug)
   }
 
   // Delete embeddings when blog is deleted

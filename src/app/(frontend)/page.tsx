@@ -1,22 +1,8 @@
-import { getPayload } from 'payload'
-import configPromise from '@payload-config'
 import { Container } from '@/components/Container'
 import { BlogCardGrid } from '@/features/blogs/components'
 import { BackgroundRippleEffect } from '@/components/ui/background-ripple-effect'
 
 export default async function HomePage() {
-  const payload = await getPayload({ config: configPromise })
-  const blogs = await payload.find({
-    collection: 'blogs',
-    limit: 20,
-    where: {
-      _status: {
-        equals: 'published',
-      },
-    },
-    depth: 2,
-  })
-
   return (
     <div className="pt-16 pb-16">
       <BackgroundRippleEffect />
@@ -27,7 +13,7 @@ export default async function HomePage() {
             Discover insights, stories, and ideas from our community
           </p>
         </div>
-        <BlogCardGrid blogs={blogs.docs} />
+        <BlogCardGrid />
       </Container>
     </div>
   )

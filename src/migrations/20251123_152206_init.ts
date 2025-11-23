@@ -1,7 +1,6 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
-  await db.execute(sql`CREATE EXTENSION IF NOT EXISTS vector;`)
   await db.execute(sql`
    CREATE TYPE "public"."enum_blogs_status" AS ENUM('draft', 'published');
   CREATE TYPE "public"."enum__blogs_v_version_status" AS ENUM('draft', 'published');

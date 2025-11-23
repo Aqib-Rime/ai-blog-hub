@@ -5,14 +5,14 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build --experimental-build-mode compile",
-    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev --turbopack",
+    "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build --webpack",
+    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev --webpack",
     "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
-    "start": "cross-env NODE_OPTIONS=--no-deprecation payload migrate && cross-env NODE_OPTIONS=--no-deprecation next build --experimental-build-mode generate && cross-env NODE_OPTIONS=--no-deprecation next start",
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "pnpm run test:int && pnpm run test:e2e",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --no-experimental-strip-types\" pnpm exec playwright test",
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
@@ -68,14 +68,14 @@
     "input-otp": "^1.4.2",
     "lucide-react": "^0.553.0",
     "motion": "^12.23.24",
-    "next": "15.5.6",
+    "next": "16.0.3",
     "next-themes": "^0.4.6",
     "payload": "3.62.0",
     "pgvector": "^0.2.1",
     "postcss": "^8.5.6",
-    "react": "19.1.0",
+    "react": "19.2.0",
     "react-day-picker": "^9.11.1",
-    "react-dom": "19.1.0",
+    "react-dom": "19.2.0",
     "react-hook-form": "^7.66.0",
     "react-markdown": "^10.1.0",
     "react-resizable-panels": "^3.0.6",
@@ -94,12 +94,12 @@
     "@playwright/test": "1.56.1",
     "@testing-library/react": "16.3.0",
     "@types/node": "^22.5.4",
-    "@types/react": "19.1.8",
-    "@types/react-dom": "19.1.6",
+    "@types/react": "19.2.6",
+    "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "4.5.2",
     "dotenv": "16.4.7",
     "eslint": "^9.16.0",
-    "eslint-config-next": "15.5.6",
+    "eslint-config-next": "16.0.3",
     "jsdom": "26.1.0",
     "playwright": "1.56.1",
     "playwright-core": "1.56.1",
@@ -122,7 +122,9 @@
     ],
     "overrides": {
       "@img/sharp-libvips-darwin-arm64": "1.2.4",
-      "@img/sharp-darwin-arm64>@img/sharp-libvips-darwin-arm64": "1.2.4"
+      "@img/sharp-darwin-arm64>@img/sharp-libvips-darwin-arm64": "1.2.4",
+      "@types/react": "19.2.6",
+      "@types/react-dom": "19.2.3"
     }
   }
 }
