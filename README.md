@@ -12,13 +12,13 @@ A modern blog platform powered by AI, featuring intelligent chat assistance usin
 
 ## 🛠️ Technology Stack
 
-- **Framework**: Next.js 15 (App Router)
-- **CMS**: Payload CMS 3.62
+- **Framework**: Next.js 16 (App Router)
+- **CMS**: Payload CMS 3.68
 - **Database**: PostgreSQL with pgvector extension
 - **AI/ML**:
-  - Groq (Llama 3.3) for chat completions
-  - Google Gemini for text embeddings
-- **UI**: React 19, Tailwind CSS, shadcn/ui
+  - Groq (Llama 3.3 70B) for chat completions
+  - Google Gemini (text-embedding-004) for text embeddings
+- **UI**: React 19, Tailwind CSS v4, shadcn/ui
 - **Language**: TypeScript
 
 ## 📋 Prerequisites
