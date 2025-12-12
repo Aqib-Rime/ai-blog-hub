@@ -45,15 +45,11 @@ export async function generateMetadata(props: PageProps<'/blogs/[slug]'>): Promi
 }
 
 export default async function BlogPostPage(props: PageProps<'/blogs/[slug]'>) {
-  const params = await props.params
-  const { isEnabled: isDraftMode } = await draftMode()
-
-  return <BlogContent isDraftMode={isDraftMode} slug={params.slug} />
-}
-
-async function BlogContent({ isDraftMode, slug }: { isDraftMode: boolean; slug: string }) {
   'use cache'
   cacheLife('max')
+
+  const { slug } = await props.params
+
   cacheTag(`blog-page-${slug}`)
 
   const payload = await getPayload({ config: configPromise })
@@ -61,12 +57,12 @@ async function BlogContent({ isDraftMode, slug }: { isDraftMode: boolean; slug: 
     collection: 'blogs',
     where: { slug: { equals: slug } },
     limit: 1,
-    draft: isDraftMode,
+    draft: (await draftMode()).isEnabled,
   })
 
   if (blogs.docs.length === 0) {
     notFound()
   }
 
-  return <BlogPage blog={blogs.docs[0]} isDraftMode={isDraftMode} />
+  return <BlogPage blog={blogs.docs[0]} />
 }

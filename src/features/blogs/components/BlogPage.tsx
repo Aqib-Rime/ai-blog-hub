@@ -6,8 +6,10 @@ import { RefreshRouteOnSave } from '@/components/RefreshRouteOnSave'
 import { BlogBanner } from './BlogPageComponents'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { cn } from '@/lib/utils'
+import { draftMode } from 'next/headers'
 
-export async function BlogPage({ blog, isDraftMode }: { blog: Blog; isDraftMode: boolean }) {
+export async function BlogPage({ blog }: { blog: Blog }) {
+  const { isEnabled: isDraftMode } = await draftMode()
   const bannerImage = extractTypedField<{ url?: string | null; alt?: string | null }>(
     blog.bannerImage,
   )
