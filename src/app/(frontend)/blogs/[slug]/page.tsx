@@ -17,7 +17,7 @@ import { cacheTag, cacheLife } from 'next/cache'
 
 // Cached version for published blogs (used in static generation)
 async function getCachedBlogBySlug(slug: string, depth: number = 2) {
-  'use cache'
+  'use cache: remote'
   cacheLife('max')
   cacheTag('blogs', `blog-${slug}`)
 
@@ -55,7 +55,10 @@ async function getDraftBlogBySlug(slug: string, depth: number = 2) {
 }
 
 // Wrapper function to choose between cached and draft versions
-async function getBlogBySlug(slug: string, options: { isDraftMode?: boolean; depth?: number } = {}) {
+async function getBlogBySlug(
+  slug: string,
+  options: { isDraftMode?: boolean; depth?: number } = {},
+) {
   const { isDraftMode = false, depth = 2 } = options
 
   if (isDraftMode) {
@@ -120,7 +123,13 @@ export async function generateMetadata(props: PageProps<'/blogs/[slug]'>): Promi
 }
 
 export default async function BlogPostPage(props: PageProps<'/blogs/[slug]'>) {
+  'use cache: remote'
+  cacheLife('max')
+
   const params = await props.params
+
+  cacheTag('blogs', `blog-${params.slug}`)
+
   const { isEnabled: isDraftMode } = await draftMode()
   const blog = await getBlogBySlug(params.slug, { isDraftMode })
 
@@ -128,7 +137,9 @@ export default async function BlogPostPage(props: PageProps<'/blogs/[slug]'>) {
     notFound()
   }
 
-  const bannerImage = extractTypedField<{ url?: string | null; alt?: string | null }>(blog.bannerImage)
+  const bannerImage = extractTypedField<{ url?: string | null; alt?: string | null }>(
+    blog.bannerImage,
+  )
   const author = extractTypedField<{ email: string }>(blog.author)
   const publishDate = formatPublishDate(blog.publishDate)
 

@@ -17,10 +17,7 @@ export const Blog: CollectionConfig = {
     livePreview: {
       url: ({ data }) => {
         const baseUrl = env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
-        if (data?.slug) {
-          return `${baseUrl}/blogs/${data.slug}`
-        }
-        return baseUrl
+        return `${baseUrl}/api/preview?slug=${data?.slug}&collection=blogs&secret=${env.PAYLOAD_PREVIEW_SECRET}`
       },
     },
   },
