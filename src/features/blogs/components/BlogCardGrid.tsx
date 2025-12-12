@@ -1,8 +1,13 @@
 import { BlogCard } from './BlogCard'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { cacheLife, cacheTag } from 'next/cache'
 
 export async function BlogCardGrid() {
+  'use cache'
+  cacheLife('max')
+  cacheTag('blogs')
+
   const payload = await getPayload({ config: configPromise })
   const blogs = await payload.find({
     collection: 'blogs',

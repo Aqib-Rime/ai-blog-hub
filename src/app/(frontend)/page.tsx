@@ -1,5 +1,3 @@
-'use cache'
-
 import { Container } from '@/components/Container'
 import { BlogCardGrid } from '@/features/blogs/components'
 import { BackgroundRippleEffect } from '@/components/ui/background-ripple-effect'

@@ -27,7 +27,8 @@ import { revalidateTag } from 'next/cache'
 export function revalidateBlog(slug?: string) {
   if (slug) {
     // Revalidate specific blog and the blogs list
-    revalidateTag(`blog-${slug}`, 'max')
+    revalidateTag(`blog-page-${slug}`, 'max')
+    revalidateTag(`blog-page-metadata-${slug}`, 'max')
     revalidateTag('blogs', 'max')
   } else {
     // Revalidate all blogs
