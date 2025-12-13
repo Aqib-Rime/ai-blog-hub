@@ -1,0 +1,72 @@
+import type {
+  BetterAuthOptions,
+  BetterAuthPluginOptions,
+} from 'payload-auth/better-auth'
+import { nextCookies } from 'better-auth/next-js'
+import type { BetterAuthPlugin as BetterAuthPluginType } from 'better-auth/types'
+
+// Minimal plugins - only what's needed for Next.js cookie handling
+export const betterAuthPlugins = [nextCookies()] satisfies BetterAuthPluginType[]
+
+export type BetterAuthPlugins = typeof betterAuthPlugins
+
+export const betterAuthOptions = {
+  appName: 'ai-blog-hub',
+  trustedOrigins: [process.env.NEXT_PUBLIC_BETTER_AUTH_URL as string].filter(Boolean),
+  emailAndPassword: {
+    enabled: true,
+    requireEmailVerification: false, // Set to true in production with email setup
+    async sendResetPassword({ user, url }) {
+      console.log('Send reset password for user:', user.id, 'at url:', url)
+      // TODO: Implement email sending for password reset
+    },
+  },
+  emailVerification: {
+    sendOnSignUp: false, // Set to true in production with email setup
+    autoSignInAfterVerification: true,
+    async sendVerificationEmail({ user, url }) {
+      console.log('Send verification email for user:', user.email, 'at url:', url)
+      // TODO: Implement email sending for verification
+    },
+  },
+  plugins: betterAuthPlugins,
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60, // Cache duration in seconds (5 minutes)
+    },
+  },
+} satisfies BetterAuthOptions
+
+export type ConstructedBetterAuthOptions = typeof betterAuthOptions
+
+export const betterAuthPluginOptions = {
+  disabled: false,
+  debug: {
+    logTables: false,
+    enableDebugLogs: false,
+  },
+  disableDefaultPayloadAuth: true,
+  hidePluginCollections: true,
+  users: {
+    slug: 'users',
+    hidden: false,
+    adminRoles: ['admin'],
+    defaultRole: 'user',
+    defaultAdminRole: 'admin',
+    roles: ['user', 'admin'] as const,
+    allowedFields: ['name'],
+  },
+  accounts: {
+    slug: 'accounts',
+  },
+  sessions: {
+    slug: 'sessions',
+  },
+  verifications: {
+    slug: 'verifications',
+  },
+  betterAuthOptions: betterAuthOptions,
+} satisfies BetterAuthPluginOptions
+
+export type ConstructedBetterAuthPluginOptions = typeof betterAuthPluginOptions

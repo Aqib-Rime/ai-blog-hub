@@ -1,6 +1,6 @@
 import { Container } from '@/components/Container'
 import { ModeToggle } from '@/components/mode-toggle'
-import { Button } from '@/components/ui/button'
+import { AuthButtons } from '@/features/auth/components/auth-buttons'
 import Link from 'next/link'
 
 export function Navbar() {
@@ -13,8 +13,7 @@ export function Navbar() {
         </Link>
         <div className="flex items-center gap-2">
           <ModeToggle />
-          <Button variant="outline">Login</Button>
-          <Button>Sign up</Button>
+          <AuthButtons />
         </div>
       </Container>
     </nav>

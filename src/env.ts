@@ -8,6 +8,8 @@ export const env = createEnv({
     DATABASE_URI: z.string().url(),
     PAYLOAD_PREVIEW_SECRET: z.string().min(1).optional(),
     REVALIDATE_SECRET: z.string().min(1).optional(),
+    // Better Auth
+    BETTER_AUTH_SECRET: z.string().min(1),
     // AI/Embeddings
     GEMINI_API_KEY: z.string().min(1),
     GROQ_API_KEY: z.string().min(1),
@@ -15,6 +17,7 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_SITE_URL: z.string().url().optional(),
     NEXT_PUBLIC_PAYLOAD_URL: z.string().url().optional(),
+    NEXT_PUBLIC_BETTER_AUTH_URL: z.string().url().optional(),
   },
   runtimeEnv: {
     // Server
@@ -22,11 +25,13 @@ export const env = createEnv({
     DATABASE_URI: process.env.DATABASE_URI,
     PAYLOAD_PREVIEW_SECRET: process.env.PAYLOAD_PREVIEW_SECRET,
     REVALIDATE_SECRET: process.env.REVALIDATE_SECRET,
+    BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
     GEMINI_API_KEY: process.env.GEMINI_API_KEY,
     GROQ_API_KEY: process.env.GROQ_API_KEY,
     // Client
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
     NEXT_PUBLIC_PAYLOAD_URL: process.env.NEXT_PUBLIC_PAYLOAD_URL,
+    NEXT_PUBLIC_BETTER_AUTH_URL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
   },
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
   emptyStringAsUndefined: true,

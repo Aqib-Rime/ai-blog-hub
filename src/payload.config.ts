@@ -6,10 +6,10 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
-import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Blog } from './features/blogs/collections/blog'
 import { BlogEmbeddings } from './collections/BlogEmbeddings'
+import { payloadAuth } from './features/auth/plugin'
 import { env } from './env'
 import { migrations } from './migrations'
 
@@ -18,7 +18,7 @@ const dirname = path.dirname(filename)
 
 export default buildConfig({
   admin: {
-    user: Users.slug,
+    user: 'users', // Created by better-auth plugin
     importMap: {
       baseDir: path.resolve(dirname),
     },
@@ -45,7 +45,7 @@ export default buildConfig({
       ],
     },
   },
-  collections: [Users, Media, Blog, BlogEmbeddings],
+  collections: [Media, Blog, BlogEmbeddings],
   editor: lexicalEditor(),
   secret: env.PAYLOAD_SECRET,
   typescript: {
@@ -58,7 +58,5 @@ export default buildConfig({
     prodMigrations: migrations,
   }),
   sharp,
-  plugins: [
-    // storage-adapter-placeholder
-  ],
+  plugins: [payloadAuth()],
 })

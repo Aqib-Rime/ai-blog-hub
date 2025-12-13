@@ -6,6 +6,7 @@ const nextConfig = {
   reactStrictMode: true,
   trailingSlash: true,
   cacheComponents: true,
+  skipTrailingSlashRedirect: true,
   images: {
     remotePatterns: [
       {
@@ -13,16 +14,6 @@ const nextConfig = {
         hostname: 'images.unsplash.com',
       },
     ],
-  },
-  // Your Next.js config here
-  webpack: (webpackConfig) => {
-    webpackConfig.resolve.extensionAlias = {
-      '.cjs': ['.cts', '.cjs'],
-      '.js': ['.ts', '.tsx', '.js', '.jsx'],
-      '.mjs': ['.mts', '.mjs'],
-    }
-
-    return webpackConfig
   },
 }
 
