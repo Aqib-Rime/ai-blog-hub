@@ -1,12 +1,8 @@
 'use client'
 
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { signUp } from '@/lib/auth-client'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import {
   Card,
   CardContent,
@@ -15,116 +11,115 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { useAppForm } from '@/components/ui/form'
 import { toast } from 'sonner'
+import { revalidateLogic } from '@tanstack/react-form'
 
 export function SignUpForm() {
   const router = useRouter()
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const form = useAppForm({
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
+    validationLogic: revalidateLogic(),
+    onSubmit: async ({ value }) => {
+      try {
+        const result = await signUp.email({
+          email: value.email,
+          password: value.password,
+          name: value.name,
+        })
 
-    if (password !== confirmPassword) {
-      toast.error('Passwords do not match')
-      return
-    }
+        if (result.error) {
+          toast.error(result.error.message || 'Sign up failed')
+          return
+        }
 
-    if (password.length < 8) {
-      toast.error('Password must be at least 8 characters')
-      return
-    }
-
-    setIsLoading(true)
-
-    try {
-      const result = await signUp.email({
-        email,
-        password,
-        name,
-      })
-
-      if (result.error) {
-        toast.error(result.error.message || 'Sign up failed')
-        return
+        toast.success('Account created successfully!')
+        router.push('/')
+        router.refresh()
+      } catch (error) {
+        toast.error('An unexpected error occurred')
       }
-
-      toast.success('Account created successfully!')
-      router.push('/')
-      router.refresh()
-    } catch (error) {
-      toast.error('An unexpected error occurred')
-    } finally {
-      setIsLoading(false)
-    }
-  }
+    },
+  })
 
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
-        <CardDescription>
-          Enter your details to create your account
-        </CardDescription>
+        <CardDescription>Enter your details to create your account</CardDescription>
       </CardHeader>
-      <form onSubmit={handleSubmit}>
+      <form
+        noValidate
+        onSubmit={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          form.handleSubmit()
+        }}
+      >
         <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              type="text"
-              placeholder="John Doe"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              disabled={isLoading}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="name@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={isLoading}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="Create a password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              disabled={isLoading}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm Password</Label>
-            <Input
-              id="confirmPassword"
-              type="password"
-              placeholder="Confirm your password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              disabled={isLoading}
-            />
-          </div>
+          <form.AppField
+            name="name"
+            validators={{
+              onDynamic: ({ value }) => (!value ? 'Name is required' : undefined),
+            }}
+          >
+            {(field) => <field.TextField label="Name" placeholder="John Doe" />}
+          </form.AppField>
+          <form.AppField
+            name="email"
+            validators={{
+              onDynamic: ({ value }) =>
+                !value
+                  ? 'Email is required'
+                  : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+                    ? 'Invalid email address'
+                    : undefined,
+            }}
+          >
+            {(field) => (
+              <field.TextField label="Email" placeholder="name@example.com" type="email" />
+            )}
+          </form.AppField>
+          <form.AppField
+            name="password"
+            validators={{
+              onDynamic: ({ value }) =>
+                !value
+                  ? 'Password is required'
+                  : value.length < 8
+                    ? 'Password must be at least 8 characters'
+                    : undefined,
+            }}
+          >
+            {(field) => <field.PasswordField label="Password" placeholder="Create a password" />}
+          </form.AppField>
+          <form.AppField
+            name="confirmPassword"
+            validators={{
+              onChangeListenTo: ['password'],
+              onDynamic: ({ value, fieldApi }) => {
+                if (!value) return 'Please confirm your password'
+                const password = fieldApi.form.getFieldValue('password')
+                if (value !== password) return 'Passwords do not match'
+                return undefined
+              },
+            }}
+          >
+            {(field) => (
+              <field.PasswordField label="Confirm Password" placeholder="Confirm your password" />
+            )}
+          </form.AppField>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? 'Creating account...' : 'Sign up'}
-          </Button>
+        <CardFooter className="flex flex-col space-y-4 pt-4">
+          <form.AppForm>
+            <form.SubmitButton label="Sign up" pendingLabel="Creating account..." />
+          </form.AppForm>
           <p className="text-sm text-muted-foreground text-center">
             Already have an account?{' '}
             <Link href="/auth/sign-in" className="text-primary hover:underline">

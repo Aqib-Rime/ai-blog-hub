@@ -1,12 +1,8 @@
 'use client'
 
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { signIn } from '@/lib/auth-client'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import {
   Card,
   CardContent,
@@ -15,78 +11,83 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { useAppForm } from '@/components/ui/form'
 import { toast } from 'sonner'
+import { revalidateLogic } from '@tanstack/react-form'
 
 export function SignInForm() {
   const router = useRouter()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+  const form = useAppForm({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+    validationLogic: revalidateLogic(),
+    onSubmit: async ({ value }) => {
+      try {
+        const result = await signIn.email({
+          email: value.email,
+          password: value.password,
+        })
 
-    try {
-      const result = await signIn.email({
-        email,
-        password,
-      })
+        if (result.error) {
+          toast.error(result.error.message || 'Sign in failed')
+          return
+        }
 
-      if (result.error) {
-        toast.error(result.error.message || 'Sign in failed')
-        return
+        toast.success('Signed in successfully!')
+        router.push('/')
+        router.refresh()
+      } catch (error) {
+        toast.error('An unexpected error occurred')
       }
-
-      toast.success('Signed in successfully!')
-      router.push('/')
-      router.refresh()
-    } catch (error) {
-      toast.error('An unexpected error occurred')
-    } finally {
-      setIsLoading(false)
-    }
-  }
+    },
+  })
 
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold">Sign in</CardTitle>
-        <CardDescription>
-          Enter your email and password to access your account
-        </CardDescription>
+        <CardDescription>Enter your email and password to access your account</CardDescription>
       </CardHeader>
-      <form onSubmit={handleSubmit}>
+      <form
+        noValidate
+        onSubmit={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          form.handleSubmit()
+        }}
+      >
         <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="name@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={isLoading}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              disabled={isLoading}
-            />
-          </div>
+          <form.AppField
+            name="email"
+            validators={{
+              onDynamic: ({ value }) =>
+                !value
+                  ? 'Email is required'
+                  : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+                    ? 'Invalid email address'
+                    : undefined,
+            }}
+          >
+            {(field) => (
+              <field.TextField label="Email" placeholder="name@example.com" type="email" />
+            )}
+          </form.AppField>
+          <form.AppField
+            name="password"
+            validators={{
+              onDynamic: ({ value }) => (!value ? 'Password is required' : undefined),
+            }}
+          >
+            {(field) => <field.PasswordField label="Password" placeholder="Enter your password" />}
+          </form.AppField>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? 'Signing in...' : 'Sign in'}
-          </Button>
+        <CardFooter className="flex flex-col space-y-4 pt-4">
+          <form.AppForm>
+            <form.SubmitButton label="Sign in" pendingLabel="Signing in..." />
+          </form.AppForm>
           <p className="text-sm text-muted-foreground text-center">
             Don&apos;t have an account?{' '}
             <Link href="/auth/sign-up" className="text-primary hover:underline">
