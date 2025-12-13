@@ -179,6 +179,10 @@ export interface User {
     hasNextPage?: boolean;
     totalDocs?: number;
   };
+  /**
+   * The roles of the bh user
+   */
+  'bh-roles': ('admin' | 'user' | 'editor')[];
 }
 /**
  * Accounts are used to store user accounts for authentication providers
@@ -609,6 +613,7 @@ export interface UsersSelect<T extends boolean = true> {
   role?: T;
   account?: T;
   session?: T;
+  'bh-roles'?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

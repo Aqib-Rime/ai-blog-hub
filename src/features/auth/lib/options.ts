@@ -1,7 +1,4 @@
-import type {
-  BetterAuthOptions,
-  BetterAuthPluginOptions,
-} from 'payload-auth/better-auth'
+import type { BetterAuthOptions, BetterAuthPluginOptions } from 'payload-auth/better-auth'
 import { nextCookies } from 'better-auth/next-js'
 import type { BetterAuthPlugin as BetterAuthPluginType } from 'better-auth/types'
 
@@ -56,6 +53,20 @@ export const betterAuthPluginOptions = {
     defaultAdminRole: 'admin',
     roles: ['user', 'admin'] as const,
     allowedFields: ['name'],
+    collectionOverrides: ({ collection }) => {
+      collection.fields.push({
+        name: 'bh-roles',
+        type: 'select',
+        options: ['admin', 'user', 'editor'],
+        defaultValue: 'user',
+        hasMany: true,
+        required: true,
+        admin: {
+          description: 'The roles of the bh user',
+        },
+      })
+      return collection
+    },
   },
   accounts: {
     slug: 'accounts',
