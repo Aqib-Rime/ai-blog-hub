@@ -14,7 +14,11 @@ export async function generateStaticParams() {
     limit: 1000,
     select: { slug: true },
   })
-  return blogs.docs.map((blog) => ({ slug: blog.slug }))
+  const params = blogs.docs.map((blog) => ({ slug: blog.slug }))
+  if (params.length === 0) {
+    return [{ slug: '_placeholder' }]
+  }
+  return params
 }
 
 export async function generateMetadata(props: PageProps<'/blogs/[slug]'>): Promise<Metadata> {
