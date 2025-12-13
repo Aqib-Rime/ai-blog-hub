@@ -182,7 +182,7 @@ export interface User {
   /**
    * The roles of the bh user
    */
-  'bh-roles': ('admin' | 'user' | 'editor')[];
+  'bh-roles'?: ('admin' | 'user' | 'editor')[] | null;
 }
 /**
  * Accounts are used to store user accounts for authentication providers

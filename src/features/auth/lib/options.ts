@@ -60,11 +60,13 @@ export const betterAuthPluginOptions = {
         options: ['admin', 'user', 'editor'],
         defaultValue: 'user',
         hasMany: true,
-        required: true,
         admin: {
           description: 'The roles of the bh user',
         },
       })
+      collection.admin?.defaultColumns?.push('bh-roles')
+      collection.admin?.defaultColumns?.push('name')
+      collection.admin?.defaultColumns?.push('email-verified')
       return collection
     },
   },
