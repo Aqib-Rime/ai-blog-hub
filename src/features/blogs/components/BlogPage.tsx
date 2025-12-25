@@ -1,5 +1,5 @@
 import { Container } from '@/components/Container'
-import { Blog } from '@/payload-types'
+import { Blog, Media, User } from '@/payload-types'
 import { AuthorSection } from './AuthorSection'
 import { extractTypedField, formatPublishDate } from '../lib/blog-helpers'
 import { RefreshRouteOnSave } from '@/components/RefreshRouteOnSave'
@@ -10,21 +10,19 @@ import { draftMode } from 'next/headers'
 
 export async function BlogPage({ blog }: { blog: Blog }) {
   const { isEnabled: isDraftMode } = await draftMode()
-  const bannerImage = extractTypedField<{ url?: string | null; alt?: string | null }>(
-    blog.bannerImage,
-  )
-  const author = extractTypedField<{ email: string }>(blog.author)
   const publishDate = formatPublishDate(blog.publishDate)
 
   return (
     <article className="pt-16 flex-1 flex flex-col">
       {isDraftMode && <RefreshRouteOnSave />}
       <BlogBanner
-        bannerImage={bannerImage}
+        bannerImage={blog.bannerImage as Media}
         title={blog.title}
         publishDate={publishDate}
         publishDateRaw={blog.publishDate || ''}
-        author={author}
+        author={{
+          email: (blog.author as User).email,
+        }}
       />
 
       <div
@@ -39,8 +37,11 @@ export async function BlogPage({ blog }: { blog: Blog }) {
             <RichText data={blog.content} />
           </div>
 
-          {author && blog.authorSocialLinks && (
-            <AuthorSection author={author} socialLinks={blog.authorSocialLinks} />
+          {blog.author && (
+            <AuthorSection
+              author={{ email: (blog.author as User).email }}
+              socialLinks={blog.authorSocialLinks as Blog['authorSocialLinks']}
+            />
           )}
         </Container>
       </div>

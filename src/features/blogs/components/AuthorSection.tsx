@@ -1,21 +1,17 @@
 import Link from 'next/link'
 import { Github, Linkedin, Twitter, Globe } from 'lucide-react'
 import type { Route } from 'next'
+import { Blog } from '@/payload-types'
 
 export function AuthorSection({
   author,
   socialLinks,
 }: {
   author: { email: string }
-  socialLinks: {
-    twitter?: string | null
-    linkedin?: string | null
-    github?: string | null
-    website?: string | null
-  }
+  socialLinks: Blog['authorSocialLinks']
 }) {
   const hasSocialLinks =
-    socialLinks.twitter || socialLinks.linkedin || socialLinks.github || socialLinks.website
+    socialLinks?.twitter || socialLinks?.linkedin || socialLinks?.github || socialLinks?.website
 
   if (!hasSocialLinks) return null
 
@@ -76,4 +72,3 @@ export function AuthorSection({
     </div>
   )
 }
-

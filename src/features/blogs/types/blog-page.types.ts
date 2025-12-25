@@ -1,3 +1,5 @@
+import { Media } from '@/payload-types'
+
 export type BlogMetadataProps = {
   publishDate: string
   publishDateRaw: string
@@ -6,7 +8,7 @@ export type BlogMetadataProps = {
 }
 
 export type BlogBannerProps = {
-  bannerImage: { url?: string | null; alt?: string | null } | null
+  bannerImage: Media | null
   title: string
   publishDate: string
   publishDateRaw: string
