@@ -1,6 +1,7 @@
 import type { BetterAuthOptions, BetterAuthPluginOptions } from 'payload-auth/better-auth'
 import { nextCookies } from 'better-auth/next-js'
 import type { BetterAuthPlugin as BetterAuthPluginType } from 'better-auth/types'
+import { env } from '@/env'
 
 // Minimal plugins - only what's needed for Next.js cookie handling
 export const betterAuthPlugins = [nextCookies()] satisfies BetterAuthPluginType[]
@@ -9,7 +10,7 @@ export type BetterAuthPlugins = typeof betterAuthPlugins
 
 export const betterAuthOptions = {
   appName: 'ai-blog-hub',
-  trustedOrigins: [process.env.NEXT_PUBLIC_BETTER_AUTH_URL as string].filter(Boolean),
+  trustedOrigins: [env.NEXT_PUBLIC_SERVER_URL],
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: false, // Set to true in production with email setup

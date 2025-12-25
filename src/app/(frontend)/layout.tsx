@@ -10,7 +10,7 @@ import { ChatWidgetWrapper } from '@/components/chat/ChatWidgetWrapper'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(env.NEXT_PUBLIC_SERVER_URL),
   title: 'AI Blog Hub',
   description:
     'AI Blog Hub is a powerful platform for creating, publishing, and exploring blogs, enhanced with integrated AI chat features to help you get instant answers and inspiration.',

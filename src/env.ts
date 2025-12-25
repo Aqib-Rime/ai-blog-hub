@@ -23,15 +23,14 @@ export const env = createEnv({
     R2_PUBLIC_URL: z.url(),
   },
   client: {
-    NEXT_PUBLIC_SITE_URL: z.string().url().optional(),
-    NEXT_PUBLIC_PAYLOAD_URL: z.string().url().optional(),
-    NEXT_PUBLIC_BETTER_AUTH_URL: z.string().url().optional(),
+    NEXT_PUBLIC_SERVER_URL: z.string(),
     // PostHog Analytics
     NEXT_PUBLIC_POSTHOG_KEY: z.string().min(1),
-    NEXT_PUBLIC_POSTHOG_HOST: z.string().url(),
+    NEXT_PUBLIC_POSTHOG_HOST: z.url(),
   },
   runtimeEnv: {
     // Server
+    NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL,
     PAYLOAD_SECRET: process.env.PAYLOAD_SECRET,
     DATABASE_URI: process.env.DATABASE_URI,
     PAYLOAD_PREVIEW_SECRET: process.env.PAYLOAD_PREVIEW_SECRET,
@@ -40,9 +39,6 @@ export const env = createEnv({
     GEMINI_API_KEY: process.env.GEMINI_API_KEY,
     GROQ_API_KEY: process.env.GROQ_API_KEY,
     // Client
-    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
-    NEXT_PUBLIC_PAYLOAD_URL: process.env.NEXT_PUBLIC_PAYLOAD_URL,
-    NEXT_PUBLIC_BETTER_AUTH_URL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
     NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
     NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
 

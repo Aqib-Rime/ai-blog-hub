@@ -10,13 +10,13 @@ export const Blog: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'author', 'publishDate', 'updatedAt'],
     preview: (doc) => {
-      const baseUrl = env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+      const baseUrl = env.NEXT_PUBLIC_SERVER_URL
       const secret = env.PAYLOAD_PREVIEW_SECRET || ''
       return `${baseUrl}/api/preview?secret=${secret}&slug=${doc.slug}&collection=blogs`
     },
     livePreview: {
       url: ({ data }) => {
-        const baseUrl = env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+        const baseUrl = env.NEXT_PUBLIC_SERVER_URL
         return `${baseUrl}/api/preview?slug=${data?.slug}&collection=blogs&secret=${env.PAYLOAD_PREVIEW_SECRET}`
       },
     },
