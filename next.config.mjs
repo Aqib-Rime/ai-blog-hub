@@ -5,11 +5,6 @@ const nextConfig = {
   typedRoutes: true,
   reactStrictMode: true,
   cacheComponents: true,
-
-  serverActions: {
-    bodySizeLimit: '10mb',
-  },
-
   images: {
     remotePatterns: [
       {
