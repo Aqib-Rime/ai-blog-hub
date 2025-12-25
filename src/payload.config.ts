@@ -1,5 +1,6 @@
 // storage-adapter-import-placeholder
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { s3Storage } from '@payloadcms/storage-s3'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig } from 'payload'
@@ -58,5 +59,29 @@ export default buildConfig({
     prodMigrations: migrations,
   }),
   sharp,
-  plugins: [payloadAuth()],
+  plugins: [
+    payloadAuth(),
+    s3Storage({
+      collections: {
+        media: {
+          prefix: 'ai-blog-hub-media',
+          disableLocalStorage: true,
+          disablePayloadAccessControl: true, // Required for public R2 bucket access
+          generateFileURL: ({ filename, prefix }) => {
+            const filePrefix = prefix ? `${prefix}/` : ''
+            return `${env.R2_PUBLIC_URL}/${filePrefix}${filename}`
+          },
+        },
+      },
+      bucket: env.S3_BUCKET,
+      config: {
+        credentials: {
+          accessKeyId: env.S3_ACCESS_KEY_ID,
+          secretAccessKey: env.S3_SECRET_ACCESS_KEY,
+        },
+        region: env.S3_REGION,
+        endpoint: env.S3_ENDPOINT,
+      },
+    }),
+  ],
 })
