@@ -13,6 +13,7 @@ import remarkGfm from 'remark-gfm'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { useTheme } from 'next-themes'
+import posthog from 'posthog-js'
 
 interface ChatDialogProps {
   blogSlug?: string
@@ -47,6 +48,15 @@ export function ChatDialog({ blogSlug, onClose }: ChatDialogProps) {
         ],
       },
     ],
+    onError: (err) => {
+      // PostHog: Track chat error
+      posthog.capture('chat_error_occurred', {
+        blog_slug: blogSlug || null,
+        error_message: err.message || 'Unknown error',
+        context: blogSlug ? 'blog_page' : 'global',
+      })
+      posthog.captureException(err)
+    },
   })
 
   const isLoading = status === 'submitted' || status === 'streaming'
@@ -59,6 +69,14 @@ export function ChatDialog({ blogSlug, onClose }: ChatDialogProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim() || isLoading) return
+
+    // PostHog: Track chat message sent
+    posthog.capture('chat_message_sent', {
+      blog_slug: blogSlug || null,
+      message_length: input.trim().length,
+      context: blogSlug ? 'blog_page' : 'global',
+    })
+
     sendMessage({ text: input })
     setInput('')
   }
@@ -67,6 +85,13 @@ export function ChatDialog({ blogSlug, onClose }: ChatDialogProps) {
     await navigator.clipboard.writeText(code)
     setCopiedCode(id)
     setTimeout(() => setCopiedCode(null), 2000)
+
+    // PostHog: Track code copied
+    posthog.capture('code_copied', {
+      blog_slug: blogSlug || null,
+      code_length: code.length,
+      context: blogSlug ? 'blog_page' : 'global',
+    })
   }
 
   const renderMessageContent = (textParts: string) => {

@@ -14,6 +14,7 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { LogOut, User } from 'lucide-react'
 import { toast } from 'sonner'
+import posthog from 'posthog-js'
 
 export function UserMenu() {
   const router = useRouter()
@@ -21,11 +22,16 @@ export function UserMenu() {
 
   const handleSignOut = async () => {
     try {
+      // PostHog: Track sign out event before resetting
+      posthog.capture('user_signed_out')
+      posthog.reset()
+
       await signOut()
       toast.success('Signed out successfully')
       router.push('/')
       router.refresh()
     } catch (error) {
+      posthog.captureException(error)
       toast.error('Failed to sign out')
     }
   }

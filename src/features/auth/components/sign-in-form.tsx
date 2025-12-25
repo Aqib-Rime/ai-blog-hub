@@ -14,6 +14,7 @@ import {
 import { useAppForm } from '@/components/ui/form'
 import { toast } from 'sonner'
 import { revalidateLogic } from '@tanstack/react-form'
+import posthog from 'posthog-js'
 
 export function SignInForm() {
   const router = useRouter()
@@ -32,14 +33,33 @@ export function SignInForm() {
         })
 
         if (result.error) {
+          // PostHog: Track sign in failure
+          posthog.capture('sign_in_failed', {
+            error_message: result.error.message || 'Sign in failed',
+            email: value.email,
+          })
           toast.error(result.error.message || 'Sign in failed')
           return
         }
+
+        // PostHog: Identify user and track successful sign in
+        posthog.identify(value.email, {
+          email: value.email,
+        })
+        posthog.capture('user_signed_in', {
+          email: value.email,
+        })
 
         toast.success('Signed in successfully!')
         router.push('/')
         router.refresh()
       } catch (error) {
+        // PostHog: Track unexpected sign in error
+        posthog.capture('sign_in_failed', {
+          error_message: 'An unexpected error occurred',
+          email: value.email,
+        })
+        posthog.captureException(error)
         toast.error('An unexpected error occurred')
       }
     },

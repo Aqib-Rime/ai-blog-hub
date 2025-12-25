@@ -1,0 +1,62 @@
+[
+  {
+    "eventName": "user_signed_up",
+    "eventDescription": "User successfully created a new account",
+    "filePath": "src/features/auth/components/sign-up-form.tsx"
+  },
+  {
+    "eventName": "user_signed_in",
+    "eventDescription": "User successfully signed in to their account",
+    "filePath": "src/features/auth/components/sign-in-form.tsx"
+  },
+  {
+    "eventName": "user_signed_out",
+    "eventDescription": "User signed out of their account",
+    "filePath": "src/features/auth/components/user-menu.tsx"
+  },
+  {
+    "eventName": "sign_up_failed",
+    "eventDescription": "User encountered an error during sign up",
+    "filePath": "src/features/auth/components/sign-up-form.tsx"
+  },
+  {
+    "eventName": "sign_in_failed",
+    "eventDescription": "User encountered an error during sign in",
+    "filePath": "src/features/auth/components/sign-in-form.tsx"
+  },
+  {
+    "eventName": "blog_card_clicked",
+    "eventDescription": "User clicked on a blog card to view the full post",
+    "filePath": "src/features/blogs/components/BlogCard.tsx"
+  },
+  {
+    "eventName": "chat_opened",
+    "eventDescription": "User opened the AI chat widget",
+    "filePath": "src/components/chat/ChatWidget.tsx"
+  },
+  {
+    "eventName": "chat_closed",
+    "eventDescription": "User closed the AI chat widget",
+    "filePath": "src/components/chat/ChatWidget.tsx"
+  },
+  {
+    "eventName": "chat_message_sent",
+    "eventDescription": "User sent a message to the AI assistant",
+    "filePath": "src/components/chat/ChatDialog.tsx"
+  },
+  {
+    "eventName": "code_copied",
+    "eventDescription": "User copied a code snippet from the AI chat response",
+    "filePath": "src/components/chat/ChatDialog.tsx"
+  },
+  {
+    "eventName": "chat_error_occurred",
+    "eventDescription": "An error occurred during the AI chat conversation",
+    "filePath": "src/components/chat/ChatDialog.tsx"
+  },
+  {
+    "eventName": "theme_toggled",
+    "eventDescription": "User toggled between light and dark theme",
+    "filePath": "src/components/mode-toggle.tsx"
+  }
+]

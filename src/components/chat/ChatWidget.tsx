@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { ChatDialog } from './ChatDialog'
 import { cn } from '@/lib/utils'
+import posthog from 'posthog-js'
 
 interface ChatWidgetProps {
   blogSlug?: string
@@ -27,7 +28,14 @@ export function ChatWidget({ blogSlug }: ChatWidgetProps) {
       {!open && (
         <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 pointer-events-none">
           <Button
-            onClick={() => setOpen(true)}
+            onClick={() => {
+              setOpen(true)
+              // PostHog: Track chat opened
+              posthog.capture('chat_opened', {
+                blog_slug: blogSlug || null,
+                context: blogSlug ? 'blog_page' : 'global',
+              })
+            }}
             className={cn(
               'size-14 rounded-full shadow-lg',
               'bg-primary hover:bg-primary/90 text-primary-foreground',
@@ -46,7 +54,19 @@ export function ChatWidget({ blogSlug }: ChatWidgetProps) {
       )}
 
       {/* Chat Dialog */}
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog
+        open={open}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            // PostHog: Track chat closed
+            posthog.capture('chat_closed', {
+              blog_slug: blogSlug || null,
+              context: blogSlug ? 'blog_page' : 'global',
+            })
+          }
+          setOpen(isOpen)
+        }}
+      >
         <DialogContent className="max-w-2xl h-[85vh] sm:h-[80vh] flex flex-col p-0 gap-0 max-h-[calc(100vh-2rem)]">
           <DialogHeader className="px-4 sm:px-6 py-4 border-b shrink-0">
             <DialogTitle className="flex items-center gap-2 text-base sm:text-lg">
