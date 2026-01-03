@@ -1,5 +1,5 @@
 import { slugField, type CollectionConfig } from 'payload'
-import { HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
+import { BlocksFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { defaultVersionConfig } from '@/collections/config/default-version-config'
 import { env } from '@/env'
 import { afterChangeHook, afterDeleteHook } from './blog.hooks'
@@ -52,6 +52,9 @@ export const Blog: CollectionConfig = {
                     ...rootFeatures,
                     HeadingFeature({
                       enabledHeadingSizes: ['h2', 'h3', 'h4', 'h5', 'h6'],
+                    }),
+                    BlocksFeature({
+                      blocks: ['imageBlock'],
                     }),
                   ]
                 },

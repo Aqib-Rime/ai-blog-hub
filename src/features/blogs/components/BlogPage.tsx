@@ -1,12 +1,12 @@
 import { Container } from '@/components/Container'
-import { Blog, Media, User } from '@/payload-types'
-import { AuthorSection } from './AuthorSection'
-import { extractTypedField, formatPublishDate } from '../lib/blog-helpers'
 import { RefreshRouteOnSave } from '@/components/RefreshRouteOnSave'
-import { BlogBanner } from './BlogPageComponents'
-import { RichText } from '@payloadcms/richtext-lexical/react'
 import { cn } from '@/lib/utils'
+import { Blog, Media, User } from '@/payload-types'
 import { draftMode } from 'next/headers'
+import { formatPublishDate } from '../lib/blog-helpers'
+import { AuthorSection } from './AuthorSection'
+import { BlogBanner } from './BlogPageComponents'
+import { BlogRichText } from './BlogRichText'
 
 export async function BlogPage({ blog }: { blog: Blog }) {
   const { isEnabled: isDraftMode } = await draftMode()
@@ -34,7 +34,7 @@ export async function BlogPage({ blog }: { blog: Blog }) {
       >
         <Container className={cn('max-w-3xl flex-1 mt-8')}>
           <div className="prose prose-lg dark:prose-invert max-w-none mb-12">
-            <RichText data={blog.content} />
+            <BlogRichText lexicalData={blog.content} />
           </div>
 
           {blog.author && (

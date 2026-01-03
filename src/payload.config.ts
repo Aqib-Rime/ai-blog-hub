@@ -13,6 +13,7 @@ import { BlogEmbeddings } from './collections/BlogEmbeddings'
 import { payloadAuth } from './features/auth/plugin'
 import { env } from './env'
 import { migrations } from './migrations'
+import { ImageBlock } from './features/blogs/blocks/ImageBlock/config'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -58,6 +59,7 @@ export default buildConfig({
     },
     prodMigrations: migrations,
   }),
+  blocks: [ImageBlock],
   sharp,
   plugins: [
     payloadAuth(),

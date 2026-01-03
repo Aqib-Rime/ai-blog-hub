@@ -1,11 +1,10 @@
-import React from 'react'
-import './globals.css'
-import { Inter } from 'next/font/google'
+import { ChatWidgetWrapper } from '@/components/chat/ChatWidgetWrapper'
+import { ThemeProvider } from '@/components/theme-provider'
+import { env } from '@/env'
 import { Navbar } from '@/features/navbar/navbar'
 import type { Metadata, Viewport } from 'next'
-import { env } from '@/env'
-import { ThemeProvider } from '@/components/theme-provider'
-import { ChatWidgetWrapper } from '@/components/chat/ChatWidgetWrapper'
+import { Inter } from 'next/font/google'
+import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
