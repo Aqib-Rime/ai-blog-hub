@@ -58,6 +58,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@t3-oss/env-nextjs": "^0.13.8",
     "@tailwindcss/postcss": "^4.1.17",
+    "@tailwindcss/typography": "^0.5.19",
     "@tanstack/react-form": "^1.27.3",
     "@types/react-syntax-highlighter": "^15.5.13",
     "ai": "^5.0.93",
